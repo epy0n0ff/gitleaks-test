@@ -1,0 +1,31 @@
+name: PR Gitleaks Comment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.gitleaksignore'
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: checkout custom actions
+        uses: actions/checkout@v4
+        with:
+          repository: epy0n0ff/gitleaks-diff-comment
+          ref: 8b0e8efdaf2d599bbb4a13f9c26c826e4f71b7d3
+          path: gitleaks-diff-comment
+      - name: Comment on .gitleaksignore changes
+        uses: ./gitleaks-diff-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.pull_request.number }}
