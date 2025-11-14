@@ -1,0 +1,4 @@
+DUMMY.txt:base64-encoded-secrets:1
+DUMMY.txt:base64-encoded-secrets:2
+DUMMY.txt:aws-access-key-id:1
+.github/workflows/pr-gitleaks-comment.yml:yaml-secrets-detection:30
