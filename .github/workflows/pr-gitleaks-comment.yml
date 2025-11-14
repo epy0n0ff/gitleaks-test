@@ -18,14 +18,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: checkout custom actions
-        uses: actions/checkout@v4
-        with:
-          repository: epy0n0ff/gitleaks-diff-comment
-          ref: 32d20e0e033c8d0e5124f1eae81932b2cb7d30b4
-          path: gitleaks-diff-comment
-      - name: Comment on .gitleaksignore changes
-        uses: ./gitleaks-diff-comment
+      - name: PR Gitleaks Comment Generator
+        uses: epy0n0ff/gitleaks-diff-comment@v1.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
