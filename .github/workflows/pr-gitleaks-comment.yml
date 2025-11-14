@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: epy0n0ff/gitleaks-diff-comment
-          ref: f8ab95f9a0280566e6746066842e50632abb8338
+          ref: ae2a370fce661b05464e692c4a284b5fc4a3d77a
           path: gitleaks-diff-comment
       - name: Comment on .gitleaksignore changes
         uses: ./gitleaks-diff-comment
