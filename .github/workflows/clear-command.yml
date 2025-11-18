@@ -11,34 +11,28 @@ jobs:
       github.event.issue.pull_request &&
       contains(github.event.comment.body, '@github-actions') &&
       contains(github.event.comment.body, '/clear')
+
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write  # Required to delete PR review comments
+      issues: write         # Required to delete issue comments (PR comments are issue comments)
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: PR Gitleaks Comment Generator
+
+      - name: Execute clear command
+        id: clear
         uses: epy0n0ff/gitleaks-diff-comment@1d84778448ccb7b4151bfa0a7a40365304f5f200
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pr-number: ${{ github.event.pull_request.number }}
-        env:
-          # GitHub Actions automatically provides GITHUB_TOKEN
-          INPUT_GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-          # Repository information
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-          # PR number from issue
-          INPUT_PR-NUMBER: ${{ github.event.issue.number }}
-
-          # Command information
-          INPUT_COMMAND: clear
-          INPUT_COMMENT-ID: ${{ github.event.comment.id }}
-          INPUT_REQUESTER: ${{ github.event.comment.user.login }}
-
+          pr-number: ${{ github.event.issue.number }}
+          command: clear
+          comment-id: ${{ github.event.comment.id }}
+          requester: ${{ github.event.comment.user.login }}
           # Enterprise Server support (optional)
-          # INPUT_GH-HOST: github.company.com
+          # gh-host: github.company.com
 
       - name: Add job summary
         if: always()
