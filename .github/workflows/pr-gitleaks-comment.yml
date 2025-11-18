@@ -26,11 +26,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: PR Gitleaks Comment Generator
-        uses: epy0n0ff/gitleaks-diff-comment@4683579bb2ab6eba78c27252d4e6a91d723d76a7
+        uses: epy0n0ff/gitleaks-diff-comment@f7ca7f70951dc3f24f87fe864d7a7b84b6fb4ce3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
-          debug: 'false'
+          debug: 'true'
   clear:
     # Only run on pull request comments that mention the bot with /clear command
     if: |
@@ -50,7 +50,7 @@ jobs:
 
       - name: Execute clear command
         id: clear
-        uses: epy0n0ff/gitleaks-diff-comment@4683579bb2ab6eba78c27252d4e6a91d723d76a7
+        uses: epy0n0ff/gitleaks-diff-comment@f7ca7f70951dc3f24f87fe864d7a7b84b6fb4ce3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.issue.number }}
