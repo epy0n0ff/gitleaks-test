@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: PR Gitleaks Comment Generator
-        uses: epy0n0ff/gitleaks-diff-comment@115d5a0bc0959a9e4c377becb6e52620848f2844
+        uses: epy0n0ff/gitleaks-diff-comment@4683579bb2ab6eba78c27252d4e6a91d723d76a7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
@@ -50,7 +50,7 @@ jobs:
 
       - name: Execute clear command
         id: clear
-        uses: epy0n0ff/gitleaks-diff-comment@b900cac1a15a9c5d0cfe64047d92edca097e8885
+        uses: epy0n0ff/gitleaks-diff-comment@4683579bb2ab6eba78c27252d4e6a91d723d76a7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.issue.number }}
