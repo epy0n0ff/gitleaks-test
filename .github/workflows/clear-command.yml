@@ -24,7 +24,7 @@ jobs:
 
       - name: Execute clear command
         id: clear
-        uses: epy0n0ff/gitleaks-diff-comment@88752e22d9533ea43c7e0ba1bd11cb307589bbbf
+        uses: epy0n0ff/gitleaks-diff-comment@b900cac1a15a9c5d0cfe64047d92edca097e8885
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.issue.number }}
