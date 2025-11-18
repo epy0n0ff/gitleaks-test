@@ -1,3 +1,4 @@
+.github/workflows/pr-gitleaks-comment.yml:yaml-secrets-detection:3
 .github/workflows/pr-gitleaks-comment.yml:yaml-secrets-detection:30
 DUMMY.txt:base64-encoded-secrets:1
 DUMMY.txt:base64-encoded-secrets:2
