@@ -14,7 +14,12 @@ permissions:
 
 jobs:
   comment:
+    # Only run on pull_request events (not issue_comment events)
+    if: github.event_name == 'pull_request'
+
     runs-on: ubuntu-latest
+    name: Comment on .gitleaksignore changes
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,7 +30,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
-          debug: 'true'
+          debug: 'false'
   clear:
     # Only run on pull request comments that mention the bot with /clear command
     if: |
