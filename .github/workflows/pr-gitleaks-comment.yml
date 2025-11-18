@@ -5,6 +5,8 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - '.gitleaksignore'
+  issue_comment:
+    types: [created]
 
 permissions:
   pull-requests: write
@@ -19,8 +21,46 @@ jobs:
         with:
           fetch-depth: 0
       - name: PR Gitleaks Comment Generator
-        uses: epy0n0ff/gitleaks-diff-comment@b900cac1a15a9c5d0cfe64047d92edca097e8885
+        uses: epy0n0ff/gitleaks-diff-comment@115d5a0bc0959a9e4c377becb6e52620848f2844
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
           debug: 'true'
+  clear:
+    # Only run on pull request comments that mention the bot with /clear command
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@github-actions') &&
+      contains(github.event.comment.body, '/clear')
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write  # Required to delete PR review comments
+      issues: write         # Required to delete issue comments (PR comments are issue comments)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Execute clear command
+        id: clear
+        uses: epy0n0ff/gitleaks-diff-comment@b900cac1a15a9c5d0cfe64047d92edca097e8885
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.issue.number }}
+          command: clear
+          comment-id: ${{ github.event.comment.id }}
+          requester: ${{ github.event.comment.user.login }}
+          # Enterprise Server support (optional)
+          # gh-host: github.company.com
+
+      - name: Add job summary
+        if: always()
+        run: |
+          echo "## Clear Comments Command Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR**: #${{ github.event.issue.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Requested by**: @${{ github.event.comment.user.login }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the workflow logs above for detailed execution metrics." >> $GITHUB_STEP_SUMMARY
