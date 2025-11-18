@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: PR Gitleaks Comment Generator
-        uses: epy0n0ff/gitleaks-diff-comment@v1.0.0
+        uses: epy0n0ff/gitleaks-diff-comment@6e190bc221b952074a54cebb036525470b3fcb99
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
