@@ -1,0 +1,51 @@
+name: Clear Comments Command
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  clear:
+    # Only run on pull request comments that mention the bot with /clear command
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@github-actions') &&
+      contains(github.event.comment.body, '/clear')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: PR Gitleaks Comment Generator
+        uses: epy0n0ff/gitleaks-diff-comment@1d84778448ccb7b4151bfa0a7a40365304f5f200
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.pull_request.number }}
+        env:
+          # GitHub Actions automatically provides GITHUB_TOKEN
+          INPUT_GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Repository information
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+          # PR number from issue
+          INPUT_PR-NUMBER: ${{ github.event.issue.number }}
+
+          # Command information
+          INPUT_COMMAND: clear
+          INPUT_COMMENT-ID: ${{ github.event.comment.id }}
+          INPUT_REQUESTER: ${{ github.event.comment.user.login }}
+
+          # Enterprise Server support (optional)
+          # INPUT_GH-HOST: github.company.com
+
+      - name: Add job summary
+        if: always()
+        run: |
+          echo "## Clear Comments Command Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR**: #${{ github.event.issue.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Requested by**: @${{ github.event.comment.user.login }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the workflow logs above for detailed execution metrics." >> $GITHUB_STEP_SUMMARY
